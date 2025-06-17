@@ -12,8 +12,18 @@ public:
         this->pin = pin;
         pinMode(this->pin, INPUT_PULLUP);
     };
-    bool getState() {
-        return !digitalRead(this->pin);
+    bool getState(uint8_t wait = 0) {
+        if (delay > 0) {
+            if (!digitalRead(this->pin) == LOW) { return LOW; }
+            delay(wait);
+            bool val = !digitalRead(this->pin);
+            if (!val) {
+                Serial.println("oh no");
+            }
+            return val;
+        } else {
+            return !digitalRead(this->pin);
+        }
     };
 };
 
