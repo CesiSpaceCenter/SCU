@@ -43,19 +43,19 @@ void loop() {
     buzzer->onTime = 150;
 
     if (servoSwitch->getState()) {  // open/close servo
-      servo->write(179);
+      servo->write(SERVO_OPEN_ANGLE);
     } else {
-      servo->write(0);
+      servo->write(SERVO_CLOSE_ANGLE);
     }
 
     if (armSwitch->getState()) {  // we want to switch to armed state
-      if (!jack->getState()) {  // but the jack is not pluged in
+      if (!jack->getState(0)) {  // but the jack is not plugged in
         // beep continously
         buzzer->offTime = 0;
         buzzer->onTime = 10000;
       } else {
         state = STATE_ARMED;
-        servo->write(0);
+        servo->write(SERVO_CLOSE_ANGLE);
       }
     }
     break;
@@ -81,9 +81,8 @@ void loop() {
     buzzer->onTime = 1000;
 
     if (millis() - apogeeTimer >= APOGEE_TIME) {  // apogee reached (timer)
-      servo->write(0);  // open the servo
+      servo->write(SERVO_OPEN_ANGLE);  // open the servo
       landedTimer = millis();  // start the landed timer
-      servo->write(179);
       state = STATE_DESCENT;
     }
     break;
