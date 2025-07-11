@@ -12,4 +12,7 @@
 #define APOGEE_TIME     8000  // in seconds
 #define LANDED_TIME     23000  // in seconds
 
+#define SERVO_OPEN_ANGLE 90
+#define SERVO_CLOSE_ANGLE 185
+
 #endif

@@ -51,8 +51,8 @@ void loop() {
     if (armSwitch->getState()) {  // we want to switch to armed state
       if (!jack->getState(0)) {  // but the jack is not plugged in
         // beep continously
-        buzzer->offTime = 0;
-        buzzer->onTime = 10000;
+        buzzer->offTime = 10000;
+        buzzer->onTime = 0;
       } else {
         state = STATE_ARMED;
         servo->write(SERVO_CLOSE_ANGLE);
@@ -61,9 +61,9 @@ void loop() {
     break;
   
   case STATE_ARMED:
-    // 150ms beep every 1.5s
-    buzzer->offTime = 1500;
-    buzzer->onTime = 150;
+    // 2s beep every 150ms
+    buzzer->offTime = 150;
+    buzzer->onTime = 2000;
 
     if (!armSwitch->getState()) {  // abort launch, go back to standby
       state = STATE_STANDBY;
@@ -79,6 +79,10 @@ void loop() {
     // 1s beep every 2s
     buzzer->offTime = 2000;
     buzzer->onTime = 1000;
+
+    if (jack->getState()) {  // jack has been re-plugged
+      state = STATE_ARMED;
+    }
 
     if (millis() - apogeeTimer >= APOGEE_TIME) {  // apogee reached (timer)
       servo->write(SERVO_OPEN_ANGLE);  // open the servo
